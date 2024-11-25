@@ -1,0 +1,22 @@
+
+
+
+    - name: Initiaze/Move the Aide database
+      shell: sudo chmod -R 755 /var/lib/aide/
+      become_user: root
+
+    - name: Init the Aide database
+      shell: if [ ! -f /var/lib/aide/aide.db.gz ]; then sudo aide --init  ; else echo "" ; fi
+      become_user: root
+
+    - name: Transfer aide conf file
+      copy:
+        src: "{{ansible_roles_path}}/files/aide/aide.conf"
+        dest: /etc/
+        mode: 0755
+      become_user: root
+
+
+    - name: Initiaze/Move the Aide database
+      shell: if [ ! -f /var/lib/aide/aide.db.gz ]; then sudo mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz ; else echo "" ; fi
+      become_user: root
